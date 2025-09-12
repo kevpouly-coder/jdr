@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Fiche personnage</title>
+  <style>
+    body{margin:0;background:#0f1220;color:#e9ecff;font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif}
+    main{max-width:900px;margin:0 auto;padding:28px 18px}
+    .btn{display:inline-block;padding:8px 12px;border:1px solid #242a45;border-radius:10px;color:#e9ecff;text-decoration:none;background:#171b2d}
+    .btn:hover{border-color:#7aa2ff}
+    .card{background:#171b2d;border:1px solid #242a45;border-radius:12px;padding:16px;margin-top:16px}
+    .muted{color:#9aa0c3}
+    h1,h2,h3{margin-top:0}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
+</head>
+<body>
+  <main>
+    <a class="btn" href="dnd-joueurs.html">← Retour à la liste</a>
+    <h1 id="titre">Fiche personnage</h1>
+    <div id="meta" class="muted"></div>
+    <div id="content" class="card">Chargement…</div>
+  </main>
+
+  <script>
+    const GH_OWNER = "kevopouly-coder";
+    const GH_REPO  = "jdr";
+    const params = new URLSearchParams(location.search);
+    const slug = params.get("slug");
+
+    function parseFrontMatter(md){
+      const fm = { title:"(sans titre)", joueur:"", _body:md };
+      const m = md.match(/^---\\s*([\\s\\S]*?)\\s*---\\s*([\\s\\S]*)$/);
+      if(!m){ fm._body = md; return fm; }
+      m[1].split(/\\r?\\n/).forEach(line=>{
+        const k = line.split(":")[0]?.trim();
+        const v = line.split(":").slice(1).join(":").trim();
+        if(k) fm[k] = v?.replace(/^\"|\"$/g,"");
+      });
+      fm._body = m[2].trim();
+      return fm;
+    }
+
+    async function load(){
+      if(!slug){ document.getElementById('content').textContent = "Slug manquant."; return; }
+      const rawUrl = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/main/personnage/${slug}.md`;
+      try{
+        const md = await fetch(rawUrl).then(r=>{ if(!r.ok) throw new Error("Fiche introuvable"); return r.text(); });
+        const fm = parseFrontMatter(md);
+        document.getElementById('titre').textContent = fm.title || slug;
+        document.getElementById('meta').textContent = fm.joueur ? `Joueur : ${fm.joueur}` : "";
+        document.getElementById('content').innerHTML = marked.parse(fm._body || "*Aucun contenu.*");
+      }catch(e){
+        document.getElementById('content').textContent = "Erreur : " + e.message;
+      }
+    }
+    load();
+  </script>
+</body>
+</html>

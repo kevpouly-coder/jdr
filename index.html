@@ -1,39 +1,35 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <title>Connexion – Campagne JDR</title>
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Hub JDR</title>
   <style>
-    body {
-      margin:0; height:100vh; display:flex; justify-content:center; align-items:center;
-      font-family: sans-serif; background:#0f1220; color:#e9ecff;
-    }
-    .box {
-      background:#171b2d; padding:30px; border-radius:12px; text-align:center;
-      box-shadow:0 0 20px rgba(0,0,0,.4);
-    }
-    h1 {margin-top:0;}
-    button {
-      padding:10px 16px; border:none; border-radius:8px;
-      background:#7aa2ff; color:white; font-weight:bold; cursor:pointer;
-    }
-    button:hover {background:#5a82dd;}
+    :root{--bg:#0f1220;--panel:#171b2d;--text:#e9ecff;--muted:#9aa0c3;--accent:#7aa2ff;--line:#242a45}
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif}
+    main{max-width:1100px;margin:0 auto;padding:28px 18px}
+    h1{margin:0 0 16px;font-size:clamp(26px,4vw,40px)}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+    a.card{display:flex;align-items:center;justify-content:center;padding:18px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--text);text-decoration:none;min-height:150px}
+    a.card:hover{border-color:var(--accent)}
+    a.card img{max-width:100%;max-height:100px;object-fit:contain}
+    .muted{color:var(--muted)}
   </style>
 </head>
 <body>
-  <div class="box">
-    <h1>Campagne JDR</h1>
-    <p>Connecte-toi ou crée un compte pour accéder au site</p>
-    <button onclick="netlifyIdentity.open()">Connexion / Inscription</button>
-  </div>
+  <main>
+    <h1>Choisis ton univers</h1>
+    <p class="muted">Clique sur un jeu pour entrer dans son espace.</p>
 
-  <script>
-    // Quand un utilisateur se connecte
-    netlifyIdentity.on('login', user => {
-      console.log('Connecté : ', user);
-      window.location.href = "/personnages.html"; // après login, redirection vers la page du site
-    });
-  </script>
+    <div class="grid" style="margin-top:14px">
+      <!-- Logo DnD -->
+      <a class="card" href="jeux/dnd.html">
+        <img src="assets/img/dnd-logo.jpg" alt="Donjons & Dragons">
+      </a>
+      <a class="card" href="jeux/autre-1.html">Autre #1</a>
+      <a class="card" href="jeux/autre-2.html">Autre #2</a>
+      <a class="card" href="jeux/autre-3.html">Autre #3</a>
+    </div>
+  </main>
 </body>
 </html>
