@@ -3,17 +3,14 @@
   <head>
     <meta charset="utf-8" />
     <title>Administration – Campagne JDR</title>
-    <script>
-      /* évite certains white screens rares */
-      window.process = { env: { NODE_ENV: 'production' } };
-    </script>
+    <script>window.process={env:{NODE_ENV:'production'}};</script>
     <script src="https://unpkg.com/decap-cms@^3.3.0/dist/decap-cms.js"></script>
   </head>
   <body>
     <script>
       CMS.init({
         config: {
-          backend: { name: "git-gateway", branch: "main" }, // mets "master" si ta branche s’appelle master
+          backend: { name: "git-gateway", branch: "main" }, // mets "master" si ta branche = master
           media_folder: "images/uploads",
           public_folder: "/images/uploads",
           collections: [
