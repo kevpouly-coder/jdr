@@ -1,0 +1,20 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
+
+collections:
+  - name: "personnages"
+    label: "Personnages"
+    folder: "personnage"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Nom du personnage", name: "title", widget: "string" }
+      - { label: "Joueur", name: "joueur", widget: "string" }
+      - { label: "Race", name: "race", widget: "string" }
+      - { label: "Classe", name: "classe", widget: "string" }
+      - { label: "Niveau", name: "niveau", widget: "number", min: 1, max: 20 }
+      - { label: "Notes / Histoire", name: "body", widget: "markdown" }
