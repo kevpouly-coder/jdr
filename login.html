@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Connexion – Hub JDR</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0f1220;
+      --panel: #171b2d;
+      --panel-alt: rgba(23, 27, 45, 0.7);
+      --text: #e9ecff;
+      --muted: #9aa0c3;
+      --accent: #7aa2ff;
+      --error: #ff6b81;
+      --success: #5fd38a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(120% 120% at 50% 0%, rgba(122, 162, 255, 0.25), transparent 70%), var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    main {
+      width: min(960px, 100%);
+      display: grid;
+      gap: 32px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      padding: 32px;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 12px 30px rgba(5, 9, 27, 0.45);
+    }
+    h1 {
+      font-size: clamp(26px, 3vw, 36px);
+      margin-bottom: 12px;
+    }
+    p.muted { color: var(--muted); margin-top: 0; }
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      font-size: 0.9rem;
+    }
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: var(--panel-alt);
+      color: inherit;
+      font-size: 1rem;
+      transition: border-color 0.2s ease;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    button {
+      width: 100%;
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      margin-top: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: linear-gradient(120deg, var(--accent), #a07bff);
+      color: white;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 16px rgba(15, 18, 32, 0.35);
+    }
+    #messages {
+      margin-top: 12px;
+      font-size: 0.95rem;
+      color: var(--muted);
+      min-height: 1.2em;
+    }
+    #messages[data-variant="error"] { color: var(--error); }
+    #messages[data-variant="success"] { color: var(--success); }
+    footer {
+      position: absolute;
+      bottom: 24px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    a { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="card">
+      <h1>Espace MJ</h1>
+      <p class="muted">Accédez à l'administration de la campagne, gérez les personnages et partagez les ressources.</p>
+      <form id="login-form" autocomplete="on">
+        <label for="login-email">Email</label>
+        <input id="login-email" name="email" type="email" required placeholder="mj@exemple.com" />
+        <label for="login-password">Mot de passe</label>
+        <input id="login-password" name="password" type="password" required placeholder="••••••••" />
+        <button type="submit">Se connecter</button>
+      </form>
+      <div id="messages" aria-live="polite"></div>
+    </section>
+
+    <section class="card" aria-labelledby="signup-title">
+      <h2 id="signup-title">Créer un compte</h2>
+      <p class="muted">Invitez vos joueurs en leur créant un accès ou laissez-les s'inscrire eux-mêmes.</p>
+      <form id="signup-form">
+        <label for="signup-email">Email</label>
+        <input id="signup-email" name="email" type="email" required placeholder="joueur@exemple.com" />
+        <label for="signup-password">Mot de passe</label>
+        <input id="signup-password" name="password" type="password" minlength="6" required placeholder="Au moins 6 caractères" />
+        <label for="signup-role">Rôle</label>
+        <select id="signup-role" name="role" required>
+          <option value="joueur" selected>Joueur</option>
+          <option value="mj">Maître du jeu</option>
+        </select>
+        <button type="submit">Créer le compte</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <a href="/">← Retour au hub</a>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/login.js"></script>
+</body>
+</html>
