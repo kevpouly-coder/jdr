@@ -1,0 +1,2 @@
+rootProject.name = 'jdr_app'
+include ':app'
