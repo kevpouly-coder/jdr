@@ -4,7 +4,6 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Campagne JDR – Personnages</title>
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   <style>
     :root{ --bg:#0f1220; --panel:#171b2d; --text:#e9ecff; --muted:#9aa0c3; --accent:#7aa2ff; --line:#242a45; }
     body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif}
@@ -18,13 +17,16 @@
     .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:16px}
     .muted{color:var(--muted)}
     .right{margin-left:auto}
+    button.logout{background:none;border:1px solid var(--line);color:var(--muted);padding:8px 14px;border-radius:8px;cursor:pointer}
+    button.logout:hover{color:var(--text);border-color:var(--accent)}
   </style>
 </head>
 <body>
   <header>
-    <a href="/">&larr; Déconnexion</a>
+    <a href="/">← Retour</a>
     <span class="right"></span>
-    <a class="btn" href="/admin/#/collections/personnages/new">➕ Ajouter un personnage</a>
+    <button class="logout" type="button" id="logout">Déconnexion</button>
+    <a class="btn" href="/admin/index.html">➕ Ajouter un personnage</a>
   </header>
 
   <main class="wrap">
@@ -36,9 +38,24 @@
     </div>
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/auth.js"></script>
   <script>
-    // Protection: si pas connecté, renvoyer à l'accueil
-    netlifyIdentity.on('init', user => { if (!user) window.location.href = "/"; });
+    (async () => {
+      if (!window.authHelpers) return;
+      const session = await window.authHelpers.requireAuth({
+        redirectTo: "/login.html",
+        allowedRoles: ["joueur", "mj"]
+      });
+
+      if (!session) return;
+
+      const logoutBtn = document.querySelector("#logout");
+      if (logoutBtn) {
+        logoutBtn.addEventListener("click", () => window.authHelpers.signOut({ redirectTo: "/login.html" }));
+      }
+    })();
   </script>
 </body>
 </html>

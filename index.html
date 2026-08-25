@@ -6,23 +6,36 @@
   <title>Hub JDR</title>
   <style>
     :root{--bg:#0f1220;--panel:#171b2d;--text:#e9ecff;--muted:#9aa0c3;--accent:#7aa2ff;--line:#242a45}
-    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif}
+    header{display:flex;justify-content:space-between;align-items:center;padding:20px 24px}
+    header a{color:var(--text);text-decoration:none;font-weight:600}
+    header a:hover{color:var(--accent)}
     main{max-width:1100px;margin:0 auto;padding:28px 18px}
     h1{margin:0 0 16px;font-size:clamp(26px,4vw,40px)}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
-    a.card{display:flex;align-items:center;justify-content:center;padding:18px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--text);text-decoration:none;min-height:150px}
-    a.card:hover{border-color:var(--accent)}
+    a.card{display:flex;align-items:center;justify-content:center;padding:18px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--text);text-decoration:none;min-height:150px;transition:transform .15s ease,border-color .15s ease}
+    a.card:hover{border-color:var(--accent);transform:translateY(-2px)}
     a.card img{max-width:100%;max-height:100px;object-fit:contain}
     .muted{color:var(--muted)}
+    .badge{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;background:rgba(122,162,255,.12);border:1px solid rgba(122,162,255,.35);border-radius:999px;font-size:.9rem;font-weight:600;color:var(--accent)}
+    .hidden{display:none !important}
   </style>
 </head>
 <body>
+  <header>
+    <span class="badge">Hub JDR</span>
+    <nav id="auth-actions">
+      <a href="/login.html" id="login-link">Se connecter</a>
+      <a class="hidden" href="#" id="dashboard-link">Mon espace</a>
+      <a class="hidden" href="#" id="logout-link">Déconnexion</a>
+    </nav>
+  </header>
   <main>
     <h1>Choisis ton univers</h1>
     <p class="muted">Clique sur un jeu pour entrer dans son espace.</p>
 
     <div class="grid" style="margin-top:14px">
-      <!-- Logo DnD -->
       <a class="card" href="jeux/dnd.html">
         <img src="assets/img/dnd-logo.jpg" alt="Donjons & Dragons">
       </a>
@@ -31,5 +44,36 @@
       <a class="card" href="jeux/autre-3.html">Autre #3</a>
     </div>
   </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script>
+    (async () => {
+      if (!window.authHelpers) return;
+      const { getSession, redirectForRole, signOut } = window.authHelpers;
+      const session = await getSession();
+      const loginLink = document.querySelector('#login-link');
+      const dashboardLink = document.querySelector('#dashboard-link');
+      const logoutLink = document.querySelector('#logout-link');
+
+      if (session) {
+        const role = session.user?.user_metadata?.role || null;
+        const destination = redirectForRole(role);
+        if (dashboardLink) {
+          dashboardLink.href = destination;
+          dashboardLink.classList.remove('hidden');
+        }
+        if (logoutLink) {
+          logoutLink.classList.remove('hidden');
+          logoutLink.addEventListener('click', (event) => {
+            event.preventDefault();
+            signOut({ redirectTo: '/login.html' });
+          });
+        }
+        if (loginLink) loginLink.classList.add('hidden');
+      }
+    })();
+  </script>
 </body>
 </html>
