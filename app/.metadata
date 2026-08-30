@@ -1,0 +1,11 @@
+# This file tracks Flutter project metadata.
+version:
+  revision: custom
+  channel: stable
+project_type: app
+migration:
+  platforms:
+    - android
+    - linux
+    - macos
+    - windows
